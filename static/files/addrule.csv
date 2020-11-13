@@ -1,0 +1,2 @@
+r_name,r_state,r_description,r_type,src_ip,dst_ip,min_src_port,max_src_port,min_dst_port,max_dst_port,package_type,feature,r_ofadapter
+testcsv,0,,0,127.0.0.1,127.0.0.1,80,80,8000,8000,80,NULL,1
