@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from .extensions.auth import JwtQueryParamsAuthentication,JwtAdminQueryParamsAuthentication
 from .utils.jwt_auth import create_token
 from .utils.jwt_auth import idmatch,token_encode
-from .utils.serializers import UserSerializers,AdapterSerializers,RuleSerializers
+from .utils.serializers import UserSerializers,AdapterSerializers,RuleSerializers,PackagesSerializers
 import string,random
 import logging
 import csv
@@ -65,7 +65,7 @@ class Adduser(APIView):
         default_pwd = ''.join(random.sample(string.ascii_letters + string.digits, 8))
         user = Users(user_name=username, user_pwd=default_pwd, user_type=1)
         user.save()
-        return Response({'pwd': default_pwd, })
+        return Response({'code': 1001,'pwd': default_pwd, })
 
 
 # get 需要重置的'uid'
@@ -79,7 +79,7 @@ class Resetpwd(APIView):
         new_pwd = ''.join(random.sample(string.ascii_letters + string.digits, 8))
         user_object.user_pwd = new_pwd
         user_object.save()
-        return Response({'pwd': new_pwd, })
+        return Response({'code': 1001,'pwd': new_pwd, })
 
 
 # 主页展示信息部分
@@ -228,29 +228,17 @@ class Shot(APIView):
             return Response({'code': 1003, 'error': "权限错误"})
 
 
-# 实时命中数（时间精度为1min）,有点慢这样filter
-def deltashot(rid):
-    timeout = 1
-    rule = Rule.objects.get(pk=rid)
-    starttime = rule.r_addtime
-    shot=[]
-    time = starttime
-    while(time<datetime.datetime.now()):
-        timetail = time + datetime.timedelta(minutes=timeout)
-        count = Packages.objects.filter(r_id=rid,cap_date__gte=time,cap_date__lte=timetail).count()
-        shot.append(count)
-        time = timetail
-    return shot
 
+# 获取包信息
 # get r_id
-# return 命中率列表shot
-class Shotlist(APIView):
-    def get(self,request,*args,**kwargs):
+class Packinfo(APIView):
+    def get(self, request, *args, **kwargs):
         token = request.GET.get('token')
         rule_id = request.GET.get('r_id')
-        if(idmatch(token, rule_id)):
-            shot = deltashot(rule_id)
-            return Response({'code': 1001, 'shot': shot})
+        if (idmatch(token, rule_id)):
+            packages = Packages.objects.filter(r_id=rule_id)
+            packages_info = PackagesSerializers(packages, many=True)
+            return Response(packages_info.data)
         else:
             return Response({'code': 1003, 'error': "权限错误"})
 

@@ -17,7 +17,7 @@ urlpatterns = [
     path('addrulebycsv',views.Addrulebycsv.as_view()),
     path('exampledownload',views.Exampledownload.as_view()),
     path('shot',views.Shot.as_view()),
-    path('shotlist',views.Shotlist.as_view()),
+    path('packinfo',views.Packinfo.as_view()),
     path('dataclear',views.Dataclear.as_view()),
 
 ]

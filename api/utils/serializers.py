@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import Users,Adapter,Rule
+from ..models import Users,Adapter,Rule,Packages
 
 
 class UserSerializers(serializers.ModelSerializer):
@@ -18,3 +18,9 @@ class RuleSerializers(serializers.ModelSerializer):
     class Meta:
         model = Rule
         fields = "__all__"
+
+
+class PackagesSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Packages
+        fields = ['r_id','cap_date',]

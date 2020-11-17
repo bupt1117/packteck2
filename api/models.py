@@ -78,8 +78,6 @@ class Packages(models.Model):
     package_type = models.IntegerField()
     session_id = models.IntegerField()
 
-    def __str__(self):
-        return self.r_id
 
 
 
