@@ -37,7 +37,8 @@ class Changepwd(APIView):
 
     def post(self,request,*args,**kwargs):
         pwd = request.data.get('password')
-        token = request.GET.get('token')
+        token = request.META.get('HTTP_TOKEN')
+        #token = request.GET.get('token')
         token_user = token_encode(token)
         uid = token_user["user_id"]
         user_object = Users.objects.get(id=uid)
@@ -97,7 +98,8 @@ class Adaptersinfo(APIView):
 class Ruleinfo(APIView):
 
     def get(self,request,*args,**kwargs):
-        token = request.GET.get('token')
+        token = request.META.get('HTTP_TOKEN')
+        #token = request.GET.get('token')
         token_user = token_encode(token)
         uid = token_user["user_id"]
         user_object = Users.objects.get(id=uid)
@@ -110,7 +112,8 @@ class Ruleinfo(APIView):
 class Rulenum(APIView):
 
     def get(self,request,*args,**kwargs):
-        token = request.GET.get('token')
+        token = request.META.get('HTTP_TOKEN')
+        #token = request.GET.get('token')
         token_user = token_encode(token)
         uid = token_user["user_id"]
         user_object = Users.objects.get(id=uid)
@@ -121,7 +124,8 @@ class Rulenum(APIView):
 # post newrule（json）
 class Addrule(APIView):
     def post(self,request,*args,**kwargs):
-        token = request.GET.get('token')
+        token = request.META.get('HTTP_TOKEN')
+        #token = request.GET.get('token')
         token_user = token_encode(token)
         uid = token_user["user_id"]
         ruleinfo = request.data
@@ -141,7 +145,8 @@ class Addrule(APIView):
 class ChangeRule(APIView):
 
     def post(self,request,*args,**kwargs):
-        token = request.GET.get('token')
+        token = request.META.get('HTTP_TOKEN')
+        #token = request.GET.get('token')
         token_user = token_encode(token)
         uid = token_user["user_id"]
         rule_id = request.GET.get('rule_id')
@@ -173,7 +178,8 @@ class Addrulebycsv(APIView):
     parser_classes = [MultiPartParser, ]
 
     def post(self,request,format=None):
-        token = request.GET.get('token')
+        token = request.META.get('HTTP_TOKEN')
+        #token = request.GET.get('token')
         token_user = token_encode(token)
         uid = token_user["user_id"]
         file_obj = request.FILES["file"]
@@ -217,7 +223,8 @@ class Exampledownload(APIView):
 class Shot(APIView):
 
     def get(self,request,*args,**kwargs):
-        token = request.GET.get('token')
+        token = request.META.get('HTTP_TOKEN')
+        #token = request.GET.get('token')
         rule_id = request.GET.get('r_id')
         ruleobject = Rule.objects.get(pk=rule_id)
         if(idmatch(token, rule_id)):
@@ -237,7 +244,8 @@ class Shot(APIView):
 # get r_id
 class Packinfo(APIView):
     def get(self, request, *args, **kwargs):
-        token = request.GET.get('token')
+        token = request.META.get('HTTP_TOKEN')
+        #token = request.GET.get('token')
         rule_id = request.GET.get('r_id')
         if (idmatch(token, rule_id)):
             packages = Packages.objects.filter(r_id=rule_id)
@@ -250,7 +258,8 @@ class Packinfo(APIView):
 # 数据下载
 class Datadownload(APIView):
     def get(self,request,*args,**kwargs):
-        token = request.GET.get('token')
+        token = request.META.get('HTTP_TOKEN')
+        #token = request.GET.get('token')
         rule_id = request.GET.get('r_id')
         if (idmatch(token, rule_id)):
             #
@@ -265,7 +274,8 @@ class Datadownload(APIView):
 # get r_id
 class Dataclear(APIView):
     def get(self,request,*args,**kwargs):
-        token = request.GET.get('token')
+        token = request.META.get('HTTP_TOKEN')
+        #token = request.GET.get('token')
         rule_id = request.GET.get('r_id')
         if (idmatch(token, rule_id)):
             #

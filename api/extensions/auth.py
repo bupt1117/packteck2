@@ -11,7 +11,8 @@ from jwt import exceptions
 class JwtQueryParamsAuthentication(BaseAuthentication):
     def authenticate(self, request):
         # 获取token并判断token的合法性
-        token = request.query_params.get('token')
+        token = request.META.get('HTTP_TOKEN')
+        #token = request.query_params.get('token')
 
         # 1.切割
         # 2, 解密第二段/判断过期
@@ -39,7 +40,8 @@ class JwtQueryParamsAuthentication(BaseAuthentication):
 
 class JwtAdminQueryParamsAuthentication(BaseAuthentication):
     def authenticate(self, request):
-        token = request.query_params.get('token')
+        token = request.META.get('HTTP_TOKEN')
+        #token = request.query_params.get('token')
         salt = settings.SECRET_KEY
         try:
             payload = jwt.decode(token, salt, True)
