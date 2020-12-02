@@ -154,6 +154,10 @@ class ChangeRule(APIView):
             # 似乎外键不能直接updata，必须要手动继承一下
             rerule["uid"] = uid
             rerule["r_ofadapter"] = ruleobject.r_ofadapter.pk
+            if('r_name' in rerule):
+                pass
+            else:
+                rerule["r_name"]= ruleobject.r_name
             rule = RuleSerializers(ruleobject,data=rerule)
             if rule.is_valid(raise_exception=True):
                 rule.save()
