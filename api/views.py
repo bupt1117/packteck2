@@ -229,6 +229,7 @@ class Shot(APIView):
         ruleobject = Rule.objects.get(pk=rule_id)
         if(idmatch(token, rule_id)):
             count_total = ruleobject.packages_set.count()
+            # 今日0点
             date_zero = datetime.datetime.now().replace(year=datetime.datetime.now().year,
                                                         month=datetime.datetime.now().month,
                                                         day=datetime.datetime.now().day,
@@ -239,16 +240,20 @@ class Shot(APIView):
             return Response({'code': 1003, 'error': "权限错误"})
 
 
-
 # 获取包信息
-# get r_id
+# get r_id,time,timetail,格式为%Y-%m-%d %H:%M:%S
 class Packinfo(APIView):
     def get(self, request, *args, **kwargs):
         token = request.META.get('HTTP_TOKEN')
         #token = request.GET.get('token')
         rule_id = request.GET.get('r_id')
+        time = request.GET.get('time')
+        time = datetime.datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
+        timetail = request.GET.get('timetail')
+        timetail = datetime.datetime.strptime(timetail, "%Y-%m-%d %H:%M:%S")
         if (idmatch(token, rule_id)):
-            packages = Packages.objects.filter(r_id=rule_id)
+            packages = Packages.objects.filter(r_id=rule_id, cap_date__gte=time, cap_date__lte=timetail)
+            # packages = Packages.objects.filter(r_id=rule_id)
             packages_info = PackagesSerializers(packages, many=True)
             return Response(packages_info.data)
         else:
